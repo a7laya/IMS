@@ -129,7 +129,7 @@ export default {
 			this.tableData = e.list
 		},
 		getListUrl(){
-			return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&title=${this.form.title}`
+			return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&title=${this.form.title}`
 		},
 		// 搜索事件
 		searchEvent(e = false) {
@@ -149,7 +149,7 @@ export default {
 				type: 'error',
 				message: '回复内容不能为空'
 			})
-			let url = `/admin/goods_comment/review/${item.id}`
+			let url = `/api/admin/goods_comment/review/${item.id}`
 			let obj = {
 				id: item.order_id,
 				data: this.textarea

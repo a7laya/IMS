@@ -46,7 +46,7 @@ export default {
 		},
 		// 获取请求列表分页的url
 		getListUrl(){
-			return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}`
+			return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}`
 		},
 		
 		// 获取后端数据
@@ -70,7 +70,7 @@ export default {
 		// 添加 | 编辑数据方法 (添加和修改的区别=>修改要多传个id)
 		addOrEdit(data, id = 0){
 			// this.editIndex判断添加/修改 引用相应的api接口
-			let url = !id ? `/admin/${this.preUrl}` : `/admin/${this.preUrl}/${id}`
+			let url = !id ? `/api/admin/${this.preUrl}` : `/api/admin/${this.preUrl}/${id}`
 			this.showLoading()
 			this.axios.post(url,data,{token: true}).then(res=>{
 				this.getList()
@@ -91,14 +91,14 @@ export default {
 		 * 为了提高用户体验，传入一个list，直接不用刷新页面在页面上删除该行
 		 */
 		deleteItem(scope, list = false){
-			console.log("scope:",scope)
+			// console.log("scope:",scope)
 			let name = scope.row.name || scope.row.username || '该行'
 			this.$confirm('确定删除 ' + name, '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				let url = `/admin/${this.preUrl}/${scope.row.id}/delete`
+				let url = `/api/admin/${this.preUrl}/${scope.row.id}/delete`
 				let obj = {}
 				this.showLoading()
 				this.axios.post(url,obj,{token: true}).then(res=>{
@@ -131,7 +131,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-					let url = `/admin/${this.preUrl}/delete_all`
+					let url = `/api/admin/${this.preUrl}/delete_all`
 					console.log("this.ids:",this.ids)
 					let obj = {ids:this.ids}
 					this.showLoading()
@@ -154,7 +154,7 @@ export default {
 		changeStatus(item){
 			let status = item.status === 1 ?  0 : 1
 			item.name = item.name || ''
-			let url = `/admin/${this.preUrl}/${item.id}/update_status`
+			let url = `/api/admin/${this.preUrl}/${item.id}/update_status`
 			let obj = {status}
 			this.showLoading()
 			this.axios.post(url,obj,{token: true}).then(res=>{

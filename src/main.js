@@ -5,6 +5,15 @@ import './plugins/element.js'
 import router from "./router.js"
 import store from './store'
 import { Message } from 'element-ui'
+
+// 引入全局配置文件
+import $conf from "./common/config/config.js"
+Vue.prototype.$conf = $conf
+
+// 引入拖拽排序
+import VueDND from 'awe-dnd'
+Vue.use(VueDND)
+
 // import "./common/css/bootstrap.css"
 
 
@@ -62,13 +71,7 @@ axios.interceptors.response.use( response =>{
 })
 
 
-// 引入拖拽排序
-import VueDND from 'awe-dnd'
-Vue.use(VueDND)
 
-// 引入全局配置文件
-import $conf from "./common/config/config.js"
-Vue.prototype.$conf = $conf
 
 
 // 配置全局指令

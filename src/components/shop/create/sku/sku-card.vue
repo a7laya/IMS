@@ -50,7 +50,7 @@
 					cardIndex: this.index,
 					value: this.list
 				})
-				let url = "/admin/goods_skus_card_value/sort"
+				let url = "/api/admin/goods_skus_card_value/sort"
 				let obj = {
 					sortdata: this.list.map((item,index) => {
 						return {
@@ -81,7 +81,7 @@
 			...mapMutations(['sotrSkuValue','delSkuCard','vModelSkuCard','sortSkuCard','addSkuValue']),
 			// 重写添加规格卡片里面的规格值
 			addSkuValueEvent(value = false){
-				let url = `/admin/goods_skus_card_value`
+				let url = `/api/admin/goods_skus_card_value`
 				let obj = {
 					goods_skus_card_id: this.item.id, // 商品规格卡片id
 					name: this.item.name, // 商品规格卡片的名称
@@ -112,7 +112,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-						let url = `/admin/goods_skus_card/${this.item.id}/delete`
+						let url = `/api/admin/goods_skus_card/${this.item.id}/delete`
 						let obj = {}
 						this.layout.showLoading()
 						this.axios.post(url,obj,{token: true}).then(res=>{
@@ -130,7 +130,7 @@
 				
 			},
 			updataSkuCard(){
-				let url = `/admin/goods_skus_card/${this.item.id}`
+				let url = `/api/admin/goods_skus_card/${this.item.id}`
 				let obj = {...this.item}
 				this.axios.post(url,obj,{token: true}).then(res=>{
 					console.log("updataSkuCard:",res)
@@ -144,7 +144,7 @@
 			// 规格卡片排序
 			sortCard(action, index){
 				this.sortSkuCard({action, index})
-				let url = "/admin/goods_skus_card/sort"
+				let url = "/api/admin/goods_skus_card/sort"
 				let obj = {
 					sortdata: this.sku_card.map((item,index) => {
 						return {

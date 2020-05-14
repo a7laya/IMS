@@ -1,6 +1,6 @@
 <template>
 	<el-dialog title="选择图片" :visible.sync="imageModel" width="80%" top="5vh">
-		<el-container style="height: 70vh;position:relative;margin: -30px -20px;"  v-loading='asideLoading'>
+		<el-container style="height: 70vh;position:relative;margin: -30px -20px;">
 			<el-header class="d-flex align-items-center border-bottom">
 				<!-- 相册管理头部 -->
 				<div class="d-flex mr-auto">
@@ -15,7 +15,7 @@
 				
 			</el-header>
 			<el-container>
-				<el-aside width="200px" class="border-right bg-white" style="position: absolute;top: 60px;bottom: 60px;left: 0;">
+				<el-aside width="200px" class="border-right bg-white" style="position: absolute;top: 60px;bottom: 60px;left: 0;" v-loading='asideLoading'>
 					<!-- 侧边 -->
 					<ul class="list-group list-group-flush">
 						<!-- 用的是相册列表组件 -->
@@ -151,7 +151,7 @@
 			getImageListUrl() {
 				let other = ''
 				if(this.searchForm.keyword != '') other = `&keyword=${this.searchForm.keyword}`
-				return `/admin/imageclass/${this.image_class_id}/image/${this.currentPage}?limit=${this.pageSize}$order=${this.searchForm.order}${other}`;
+				return `/api/admin/imageclass/${this.image_class_id}/image/${this.currentPage}?limit=${this.pageSize}$order=${this.searchForm.order}${other}`;
 			}
 		},
 		
@@ -172,7 +172,7 @@
 				this.unchoose()
 				this.asideLoading = true
 				this.mainLoading = true
-				this.axios.get('/admin/imageclass/' + this.albumPage, { token: true }).then(res => {
+				this.axios.get('/api/admin/imageclass/' + this.albumPage, { token: true }).then(res => {
 					let result = res.data.data;
 					this.albums = result.list;
 					this.albumTotal = result.totalCount
@@ -194,7 +194,7 @@
 					this.imageList = result.list.map(item => {
 						return {
 							id: item.id,
-							url: item.url,
+							url: `${this.$conf.api}/storage/${item.url}`,
 							name: item.name,
 							isCheck: false,
 							checkOrder: 0

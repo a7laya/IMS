@@ -59,7 +59,7 @@
 				});
 			}
 			// 获取原来的商品详情
-			let url = '/admin/goods/read/' + this.id;
+			let url = '/api/admin/goods/read/' + this.id;
 			this.layout.showLoading();
 			this.axios
 				.get(url, {
@@ -83,7 +83,7 @@
 		methods: {
 			submit() {
 				this.layout.showLoading();
-				let url = '/admin/goods/attrs/' + this.id;
+				let url = '/api/admin/goods/attrs/' + this.id;
 				let obj = {
 					goods_attrs: [...this.goods_type_values].map(item => {
 						if (item.type !== 'input') item.default = item.default.join(',')

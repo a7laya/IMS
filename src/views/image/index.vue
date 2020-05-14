@@ -104,7 +104,7 @@
 		<!-- 上传图片模态框 -->
 		<el-dialog title="上传图片" :visible.sync="uploadModel" @close="__init">
 			<el-upload class="upload-demo w-100 text-center" drag multiple 
-			action="/admin/image/upload"
+			action="/api/admin/image/upload"
 			:headers="{token:$store.state.user.token}"
 			:data="{image_class_id:image_class_id}"
 			name='img'
@@ -174,7 +174,7 @@ export default {
 		getImageListUrl() {
 			let other = ''
 			if(this.searchForm.keyword != '') other = `&keyword=${this.searchForm.keyword}`
-			return `/admin/imageclass/${this.image_class_id}/image/${this.currentPage}?limit=${this.pageSize}$order=${this.searchForm.order}${other}`;
+			return `/api/admin/imageclass/${this.image_class_id}/image/${this.currentPage}?limit=${this.pageSize}&order=${this.searchForm.order}${other}`;
 		}
 	},
 	methods: {
@@ -183,7 +183,7 @@ export default {
 			// 获取相册列表
 			this.layout.showLoading()
 			this.unchoose()
-			this.axios.get('/admin/imageclass/' + this.albumPage, { token: true }).then(res => {
+			this.axios.get('/api/admin/imageclass/' + this.albumPage, { token: true }).then(res => {
 				let result = res.data.data;
 				this.albums = result.list;
 				this.albumTotal = result.totalCount
@@ -205,7 +205,7 @@ export default {
 				this.imageList = result.list.map(item => {
 					return {
 						id: item.id,
-						url: item.url,
+						url: `${this.$conf.api}/storage/${item.url}`,
 						name: item.name,
 						isCheck: false,
 						checkOrder: 0
@@ -231,7 +231,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				this.axios.delete("/admin/imageclass/"+item.id,{token: true}).then(res=>{
+				this.axios.delete("/api/admin/imageclass/"+item.id,{token: true}).then(res=>{
 					if(!res.data.data) return
 					this.$message({
 						type: 'success',
@@ -274,7 +274,7 @@ export default {
 		// 修改相册
 		albumEdit() {
 			let item = this.albums[this.albumEditIndex]
-			this.axios.post("/admin/imageclass/"+item.id,this.albumForm,{token: true}).then(res=>{
+			this.axios.post("/api/admin/imageclass/"+item.id,this.albumForm,{token: true}).then(res=>{
 				let result = res.data.data
 				if(result){
 					this.$message({
@@ -290,7 +290,7 @@ export default {
 		},
 		// 创建相册
 		albumAdd() {
-			this.axios.post("/admin/imageclass",this.albumForm,{token: true}).then(res=>{
+			this.axios.post("/api/admin/imageclass",this.albumForm,{token: true}).then(res=>{
 				let result = res.data.data
 				if(result){
 					this.$message({
@@ -311,7 +311,7 @@ export default {
 		},
 		// 修改图片名称
 		imageEdit({ item, index }) {
-			this.layout.showLoading()
+			// this.layout.showLoading()
 			this.$prompt('请输入新名称', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -320,7 +320,7 @@ export default {
 					if (val === '') return '图片名称不能为空';
 				}
 			}).then(({ value }) => {
-				this.axios.post("/admin/image/"+item.id,{name:value},{token: true}).then(res=>{
+				this.axios.post("/api/admin/image/"+item.id,{name:value},{token: true}).then(res=>{
 					if(!res.data.data) return
 					item.name = value
 					// this.__init()
@@ -390,7 +390,8 @@ export default {
 		},
 		// 删除单张图片
 		imageDel(obj) {
-			this.axios.delete('/admin/image/'+obj.item.id,{token: true}).then(res=>{
+			this.axios.delete('/api/admin/image/'+obj.item.id,{token: true}).then(res=>{
+				console.log("res:",res)
 				if(!res.data.data) return
 				// this.imageList.splice(obj.index,1)
 				this.__init()
@@ -405,7 +406,7 @@ export default {
 		},
 		// 批量删除图片
 		imageDelAll() {
-			this.axios.post("/admin/image/delete_all",{
+			this.axios.post("/api/admin/image/delete_all",{
 				ids: this.chooseList.map(v=>v.id)
 			},{token: true}).then(res=>{
 				this.$message({
@@ -426,7 +427,7 @@ export default {
 		// 删除图片询问
 		ifImageDel(obj) {
 			let { item, index, all } = obj;
-			this.$confirm(obj.all ? `是否删除这${this.chooseList.length}张图片?` : `是否删除${item.name}`, '提示', {
+			this.$confirm(obj.all ? `是否删除这${this.chooseList.length}张图片?` : `是否删除"${item.name}"`, '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'

@@ -7,7 +7,7 @@ export default {
 		
 	},
 	mutations: {
-		// 初始化用户信息 把这个方法放到app.vue的created生命周期内
+		// 初始化用户信息 把这个方法放到app.vue的created生命周期内 防止刷新页面丢失
 		initUser(state){
 			let user = window.sessionStorage.getItem('user')
 			if(user){
@@ -15,7 +15,7 @@ export default {
 				state.token = state.user.token
 			}
 		},
-		// 登录
+		// 登录 
 		login(state, user){
 			// 保存登录状态
 			state.user = user

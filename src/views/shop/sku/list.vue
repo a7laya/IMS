@@ -120,7 +120,7 @@
 			},
 			// 获取请求列表分页的url
 			getListUrl(){
-				return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}`
+				return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}`
 			},
 			// 打开模态框
 			openModel(e = false){

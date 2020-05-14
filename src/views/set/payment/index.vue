@@ -99,7 +99,7 @@
 						</el-form-item>
 						<el-form-item label="cert_client">
 							<el-upload
-							action="/admin/sysconfig/upload"
+							action="/api/admin/sysconfig/upload"
 							:headers="{ token:$store.state.user.token }"
 							:limit="1"
 							accept=".pem"
@@ -114,7 +114,7 @@
 						</el-form-item>
 						<el-form-item label="cert_key">
 							<el-upload
-							action="/admin/sysconfig/upload"
+							action="/api/admin/sysconfig/upload"
 							:headers="{ token:$store.state.user.token }"
 							:limit="1"
 							accept=".pem"
@@ -193,7 +193,7 @@ export default {
 	},
 	methods: {
 		getData(){
-			let url = '/admin/sysconfig'
+			let url = '/api/admin/sysconfig'
 			this.layout.showLoading()
 			this.axios.get(url,{token:true}).then(res=>{
 				this.form = res.data.data
@@ -227,7 +227,7 @@ export default {
 		submitDrawer(){
 			if(this.submitDrawerLoading) return
 			this.submitDrawerLoading = true
-			let url = `/admin/sysconfig`
+			let url = `/api/admin/sysconfig`
 			let obj = {...this.form}
 			this.layout.showLoading()
 			this.axios.post(url,obj,{token:true}).then(res=>{

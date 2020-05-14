@@ -53,7 +53,7 @@
 			updateSkuValueEvent(){
 				let keys = ['text', 'color', 'image']
 				this.item.value = this.item[keys[this.type]]
-				let url = "/admin/goods_skus_card_value/" + this.item.id
+				let url = "/api/admin/goods_skus_card_value/" + this.item.id
 				let obj = {...this.item}
 				this.axios.post(url,obj,{token: true})
 			},
@@ -64,7 +64,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-						let url = `/admin/goods_skus_card_value/${this.item.id}/delete`
+						let url = `/api/admin/goods_skus_card_value/${this.item.id}/delete`
 						let obj = {}
 						this.axios.post(url,obj,{token: true}).then(res=>{
 							let data = res.data.data

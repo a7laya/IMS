@@ -287,7 +287,7 @@
 			}
 		},
 		created() {
-			let url = '/admin/express_company/1?limit=50'
+			let url = '/api/admin/express_company/1?limit=50'
 			this.axios.get(url, {
 				token: true
 			}).then(res => {
@@ -302,7 +302,7 @@
 				this.tableData = e.list
 			},
 			getListUrl() {
-				return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&tab=${this.tab}${this.params}`
+				return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&tab=${this.tab}${this.params}`
 			},
 			// 点击tab加载相应数据
 			handleClick(tab, event) {
@@ -345,7 +345,7 @@
 			shipSubmit() {
 				this.$refs.shipForm.validate(res=>{
 					if(!res) return
-					let url = `/admin/order/${this.shipForm.id}/ship`
+					let url = `/api/admin/order/${this.shipForm.id}/ship`
 					let obj = { ...this.shipForm
 					}
 					this.layout.showLoading()
@@ -375,7 +375,7 @@
 						params += `&starttime=${val[0]}`
 						params += `&endtime=${val[1]}`
 					}
-					let url = `/admin/order/excelexport?tab=${this.exportForm.tab}${params}`
+					let url = `/api/admin/order/excelexport?tab=${this.exportForm.tab}${params}`
 					this.exportLoading = true
 					this.axios.post(url,{},{
 					    token:true,

@@ -123,7 +123,7 @@ export default {
 		// 获取之前的商品详情
 		this.layout.showLoading()
 		let defaultVal = ['属性值','#FFFFFF','/favicon.ico'];
-		this.axios.get('/admin/goods/read/'+this.id,{
+		this.axios.get('/api/admin/goods/read/'+this.id,{
 			token:true
 		}).then(res=>{
 			let data = res.data.data
@@ -179,7 +179,7 @@ export default {
 		...mapMutations(['addSkuCard', 'vModelState', 'vModelGoodsAttrs']),
 		// 重写添加规格卡片addSkuCard
 		addSkuCardEvent(){
-			let url = "/admin/goods_skus_card"
+			let url = "/api/admin/goods_skus_card"
 			let obj = {
 				goods_id: this.id, // 商品id
 				name: '规格名称',  // 规格卡片名称
@@ -259,7 +259,7 @@ export default {
 				})
 			}
 			this.layout.showLoading()
-			this.axios.post('/admin/goods/updateskus/'+this.id,{
+			this.axios.post('/api/admin/goods/updateskus/'+this.id,{
 				sku_type:this.sku_type,
 				sku_value:this.sku_value,
 				goodsSkus:list

@@ -1,5 +1,6 @@
 export default {
-	logo: "UNI-ADMIN1",
+	api: "https://api.a7laya.com", // 生产环境api配置
+	logo: "库存管理系统",
 	navBar: {
 		active: '0',
 		list: [

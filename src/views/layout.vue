@@ -87,7 +87,7 @@ export default {
 	},
 	watch:{
 		'$route'(to, form) {
-			console.log("this.$route:",this.$route);
+			// console.log("this.$route:",this.$route);
 			// 更新面包屑导航
 			this.getRouterBran()
 			// 当前激活菜单重设置
@@ -146,7 +146,7 @@ export default {
 		},
 		// 获取面包屑
 		getRouterBran(){
-			console.log("this.$route.matched:",this.$route.matched)
+			// console.log("this.$route.matched:",this.$route.matched)
 			let b = this.$route.matched.filter(v => v.name)
 			let arr = []
 			// 过滤layout和index
@@ -189,11 +189,11 @@ export default {
 			// 跳转
 			this.$router.push({
 				name: this.slideMenus[key].pathname
-			})
+			}).catch(err => {err})
 		},
 		// 退出登录
 		logout(){
-			this.axios.post('/admin/logout',{},{token: true,loading:true}).then(res=>{
+			this.axios.post('/api/admin/logout',{},{token: true,loading:true}).then(res=>{
 				console.log("res:",res)
 				this.$message('退出成功')
 				// 清除状态和本地存储

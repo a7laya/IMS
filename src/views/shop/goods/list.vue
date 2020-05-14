@@ -180,7 +180,7 @@
 				this.cateOptions = e.cates
 			},
 			getListUrl() {
-				return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&tab=${this.tab}${this.params}`
+				return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&tab=${this.tab}${this.params}`
 			},
 			
 			// 清空筛选条件
@@ -210,7 +210,7 @@
 					type: 'error',
 					message: '请选择要操作的商品'
 				})
-				let url = `/admin/goods/${key}`
+				let url = `/api/admin/goods/${key}`
 				let obj = { ids: this.ids, status }
 				this.layout.showLoading()
 				this.axios.post(url, obj, {token: true}).then(res=>{
@@ -227,7 +227,7 @@
 			// 审核
 			checkGoods(item,ischeck){
 				let msg = ['保留审核状态','已通过审核','已拒绝审核']
-				let url = `/admin/goods/${item.id}/check`
+				let url = `/api/admin/goods/${item.id}/check`
 				let obj = {
 					ischeck 
 				}

@@ -223,7 +223,7 @@ export default {
 		},
 		// 添加策略
 		addValue(){
-			let url = "/admin/express_value"
+			let url = "/api/admin/express_value"
 			let obj = {
 				first: 0, // 首件(个)/首重(Kg)
 				first_price: 0, // 运费(元)
@@ -251,7 +251,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-					let url = `/admin/express_value/${item.id}/delete`
+					let url = `/api/admin/express_value/${item.id}/delete`
 					let obj = {}
 					this.axios.post(url,obj,{token: true}).then(res=>{
 						console.log('res:',res)
@@ -266,7 +266,7 @@ export default {
 		},
 		// 修改策略
 		change(item){
-			let url = `/admin/express_value/${item.id}`
+			let url = `/api/admin/express_value/${item.id}`
 			let obj = {...item}
 			this.axios.post(url,obj,{token: true}).then(res=>{
 				console.log('res:',res)

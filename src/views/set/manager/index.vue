@@ -1,3 +1,4 @@
+<!-- 管理员管理及相关权限配置 -->
 <template>
 	<div class="">
 		<el-tabs v-model="preUrl" @tab-click="getList">
@@ -17,7 +18,7 @@
 					</el-table-column>
 					<el-table-column prop="username" label="管理员名称" align="center" min-width="144"></el-table-column>
 					<el-table-column prop="create_time" label="创建时间" align="center" width="188"></el-table-column>
-					<el-table-column label="所属管理员" align="center" width="122">
+					<el-table-column label="所属角色" align="center" width="122">
 						<template slot-scope="scope">
 							{{ scope.row.role.name }}
 						</template>
@@ -41,7 +42,7 @@
 			<!-- 角色列表 -->
 			<el-tab-pane label="角色列表" name="role">
 				<div class="d-flex align-items-center">
-					<el-button type="primary" @click="openDialog('role')" size="small" v-auth="'角色管理'">添加角色</el-button>
+					<el-button type="primary" @click="openDialog('role')" size="small" v-auth="'添加角色'">添加角色</el-button>
 				</div>
 				<!-- 表格 -->
 				<el-table border class="mt-3" :data="roleList" style="width: 100%">
@@ -107,12 +108,13 @@
 		<!--===== 新增 | 修改模态框 =====-->
 		<el-dialog :title="dialogTitle" :visible.sync="dialogVisible" top="5vh" :before-close="handleClose">
 			<!-- 添加 | 修改管理员 -->
-			<el-form v-if="preUrl === 'manager'" ref="manager" :rules="rules" :model="form.manager" label-width="80px">
+			<el-form v-show="preUrl === 'manager'" ref="manager" :rules="rules.manager" :model="form.manager" label-width="80px">
 				<el-form-item label="用户名" prop="username">
-					<el-input v-model="form.manager.username" placeholder="用户名" size="mini" class="w-50"></el-input>
+					<el-input v-model="form.manager.username" placeholder="5到20个字符" size="mini" class="w-50"></el-input>
 				</el-form-item>
-				<el-form-item label="密码" prop="password">
-					<el-input type="password" v-model="form.manager.password" placeholder="密码" size="mini" class="w-50"></el-input>
+				<el-form-item label="密码" :prop="form.manager.id ? 'password2' : 'password'">
+					<el-input type="password" v-model="form.manager.password" size="mini" class="w-50"
+					:placeholder="form.manager.id ? '不更改不用填' : '5到20个字符'" ></el-input>
 				</el-form-item>
 				<el-form-item label="头像">
 					<div>
@@ -120,7 +122,7 @@
 						<img v-else :src="form.manager.avatar" class="rounded" style="width: 45px; height: 45px; cursor: pointer;" @click="chooseImage" />
 					</div>
 				</el-form-item>
-				<el-form-item label="关联角色" prop="role">
+				<el-form-item label="关联角色" prop="role_id">
 					<el-select v-model="form.manager.role_id" placeholder="请选择角色" size="mini">
 						<el-option v-for="(item, index) in roleOptions" :key="index" :label="item.name" :value="item.id"></el-option>
 					</el-select>
@@ -134,8 +136,8 @@
 			</el-form>
 
 			<!-- 添加 | 修改角色 -->
-			<el-form v-if="preUrl === 'role'" ref="role" :rules="rules" :model="form.role" label-width="80px">
-				<el-form-item label="角色名称" prop="roleName">
+			<el-form v-show="preUrl === 'role'" ref="role" :rules="rules.role" :model="form.role" label-width="80px">
+				<el-form-item label="角色名称" prop="name">
 					<el-input v-model="form.role.name" placeholder="角色名称" size="mini" class="w-50"></el-input>
 				</el-form-item>
 				<el-form-item label="角色描述" prop="desc">
@@ -150,8 +152,8 @@
 			</el-form>
 
 			<!-- 添加 | 修改规则-->
-			<el-form v-if="preUrl === 'rule'" ref="rule" :rules="rules" :model="form.rule" label-width="120px">
-				<el-form-item label="上级规则" prop="parentRule">
+			<el-form v-show="preUrl === 'rule'" ref="rule" :rules="rules.rule" :model="form.rule" label-width="120px">
+				<el-form-item label="上级规则" prop="rule_id">
 					<el-select v-model="form.rule.rule_id" placeholder="请选择上级规则" size="mini">
 						<el-option label="顶级规则" :value="0"></el-option>
 						<el-option v-for="(item, index) in ruleOptions" :key="index" :label="item | tree" :value="item.id"></el-option>
@@ -163,7 +165,7 @@
 						<el-radio :label="0" border>规则</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="规则名称" prop="ruleName">
+				<el-form-item label="规则名称" prop="name">
 					<el-input v-model="form.rule.name" placeholder="规则名称" size="mini" class="w-50"></el-input>
 				</el-form-item>
 				<el-form-item label="图标" prop="icon" v-if="form.rule.menu">
@@ -176,7 +178,8 @@
 					<el-input v-model="form.rule.desc" placeholder="前台路由别名" size="mini"></el-input>
 				</el-form-item>
 				<el-form-item label="后端规则" prop="condition" v-if="!form.rule.menu">
-					<el-input v-model="form.rule.condition" placeholder="后端规则" size="mini"></el-input>
+					<el-input v-model="form.rule.condition" size="mini"
+					 placeholder="后端规则 - 如:admin.manager/index"></el-input>
 				</el-form-item>
 				<el-form-item label="请求方式" prop="method" v-if="!form.rule.menu">
 					<el-select v-model="form.rule.method" placeholder="请选择请求方式" size="mini">
@@ -210,7 +213,6 @@
 				  default-expand-all
 				  :default-checked-keys="checkedKeys"
 				  :props="defaultProps"
-				  :check-strictly="true"
 				  @check="check">
 				</el-tree>
 			</div>
@@ -230,6 +232,15 @@
 		inject: ['app', 'layout'],
 		mixins: [common],
 		data() {
+			// 自定义验证
+			var validatePass = (rule, value, callback) => {
+				if(value === undefined) value = ""
+				if (value !== "") {
+					if(value.length < 5 || value.length > 20)
+					callback(new Error('密码长度应该5到20个字符'))
+				}
+				callback();
+			};
 			return {
 				preUrl: 'manager',
 				keyword: '',
@@ -254,7 +265,7 @@
 						status:1,
 						frontpath:"",
 						desc:"",
-						condition:"",
+						condition:"", // 后端规则 api对应的控制器方法路径
 						icon:"",
 						method:"GET",
 						order:50
@@ -269,36 +280,27 @@
 					label: 'name'
 				},
 				rules: {
-					username: [{
-						required: true,
-						message: '请输入用户名',
-						trigger: 'blur'
-					}],
-					roleName: [{
-						required: true,
-						message: '请输入角色名称',
-						trigger: 'blur'
-					}],
-					password: [{
-						required: true,
-						message: '请输入密码',
-						trigger: 'blur'
-					}],
-					role: [{
-						required: true,
-						message: '请选择角色',
-						trigger: 'blur'
-					}],
-					parentRule: [{
-						required: true,
-						message: '请选择上级规则',
-						trigger: 'blur'
-					}],
-					ruleName: [{
-						required: true,
-						message: '请填写规则名称',
-						trigger: 'blur'
-					}],
+					manager: {
+						username: [
+							{ required: true, message: '请输入用户名',trigger: 'blur'},
+							{ min: 5, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+						],
+						password: [
+							{ required: true, message: '请输入密码',trigger: 'blur'},
+							{ min: 5, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+						],
+						password2: [
+							{ min: 5, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+						],
+						role_id:  [{ required: true, message: '请选择关联角色',  trigger: 'change' }],
+					},
+					role: {
+						name: [{required: true,message: '请输入角色名称',trigger: 'blur'}],
+					},
+					rule: {
+						rule_id: [{required: true,message: '请选择上级规则',trigger: 'change'}],
+						name: [{required: true,message: '请填写规则名称',trigger: 'blur'}],
+					},
 				},
 
 				dialogVisible: false,
@@ -341,6 +343,7 @@
 					case 'manager':
 						this.roleOptions = e.role;
 						this.managerList = e.list;
+						console.log("this.managerList:",this.managerList)
 						break;
 					case 'role':
 						this.roleList = e.list;
@@ -355,13 +358,15 @@
 			},
 			// mixins-common获取请求列表分页的url
 			getListUrl() {
-				if (this.preUrl === 'manager') return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&keyword=${this.keyword}`;
-				return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}`;
+				if (this.preUrl === 'manager') return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&keyword=${this.keyword}`;
+				return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}`;
 			},
 
 			// ========== 模态框相关操作 ==========
 			// 打开模态框
 			openDialog(type, item = false) {
+				// 打开之后清除上一次的校验结果
+				this.$refs[this.preUrl] && this.$refs[this.preUrl].clearValidate()
 				// 传入类型 ‘manager’ - ‘role’ - ‘rule’
 				this.dialogType = type;
 				this.dialogTitle = `${item ? '修改' : '添加'}${this.tabName}`;
@@ -407,8 +412,7 @@
 							};
 							this.form.rule.rule_id = typeof item === 'number' ? item : "" 
 						} else {
-							this.form.rule = { ...item
-							};
+							this.form.rule = { ...item };
 						}
 						break;
 					default:
@@ -421,6 +425,8 @@
 				this.$refs[this.preUrl].validate(res => {
 					if (!res) return
 					let item = this.form[this.preUrl];
+					// 操作权限列表的时候，将规则中的后端规则在存入数据库前转换为小写
+					if(this.preUrl === 'rule') item.condition = item.condition.toLowerCase()
 					this.addOrEdit(item, item.id);
 					this.dialogVisible = false;
 				});
@@ -428,6 +434,7 @@
 
 			// 模态框关闭前
 			handleClose(done) {
+				// this.$refs[this.preUrl].clearValidate()
 				done()
 				// this.$confirm('确认关闭？')
 				// 	.then(_ => {
@@ -439,6 +446,7 @@
 			// 选择头像
 			chooseImage() {
 				this.app.chooseImage(res => {
+					console.log("res[0].url:",res[0].url)
 					this.form.manager.avatar = res[0].url;
 				}, 1);
 			},
@@ -456,7 +464,7 @@
 				this.role_id = item.id
 				this.drawer = true
 				// 请求权限列表
-				let url = `/admin/rule/1`
+				let url = `/api/admin/rule/1`
 				this.drawerLoading = true
 				this.axios.get(url,{token:true}).then(res=>{
 					this.ruleList = res.data.data.list
@@ -483,7 +491,7 @@
 			
 			// 提交配置权限修改
 			submitRules(){
-				let url = `/admin/role/set_rules`
+				let url = `/api/admin/role/set_rules`
 				let obj = {
 					id: this.role_id,
 					rule_ids: this.checkedKeys

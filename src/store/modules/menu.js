@@ -9,75 +9,14 @@ export default {
 		// 获取第一个页面, 因为有的用户权限菜单首页并不是index页面,所以要先获取到第一个页面让其在登陆后进行跳转
 		adminIndex(state){
 			if(state.navBar.list.length === 0) return 'error_404'
+			if(state.navBar.list[0].subMenu.length === 0) return 'error_404'
 			let item = state.navBar.list[0].subMenu[0]
 			if(item) return item.pathname
 		}
 	},
 	mutations: {
-		/**
-		 {
-			 "id": 5,
-			 "rule_id": 0,
-			 "status": 1,
-			 "create_time": "2019-08-11 13:36:09",
-			 "update_time": "2019-08-11 13:36:09",
-			 "name": "首页",
-			 "desc": "index",
-			 "condition": null,
-			 "menu": 1,
-			 "order": 21,
-			 "icon": null,
-			 "method": "GET",
-			 "pivot": {
-				 "id": 43,
-				 "role_id": 3,
-				 "rule_id": 5
-			 },
-			 "child": [
-				 {
-					 "id": 10,
-					 "rule_id": 5,
-					 "status": 1,
-					 "create_time": "2019-08-11 13:37:02",
-					 "update_time": "2019-08-11 13:37:02",
-					 "name": "后台首页",
-					 "desc": "index",
-					 "condition": null,
-					 "menu": 1,
-					 "order": 20,
-					 "icon": "el-icon-s-home",
-					 "method": "GET",
-					 "pivot": {
-						 "id": 46,
-						 "role_id": 3,
-						 "rule_id": 10
-					 },
-					 "child": []
-				 },
-				 {
-					 "id": 12,
-					 "rule_id": 5,
-					 "status": 1,
-					 "create_time": "2019-12-28 13:39:36",
-					 "update_time": "2019-12-28 13:39:36",
-					 "name": "商品列表",
-					 "desc": "shop_goods_list",
-					 "condition": null,
-					 "menu": 1,
-					 "order": 20,
-					 "icon": "el-icon-s-claim",
-					 "method": "GET",
-					 "pivot": {
-						 "id": 47,
-						 "role_id": 3,
-						 "rule_id": 12
-					 },
-					 "child": []
-				 }
-			 ]
-		 } 
-		 * **/
-		// 初始化 把这个方法放到app.vue的created生命周期内
+
+		// 初始化菜单 把这个方法放到app.vue的created生命周期内 防止刷新页面丢失
 		initNavBar(state){
 			let navBar = window.sessionStorage.getItem('navBar')
 			state.navBar = navBar ? JSON.parse(navBar) : {active: '0', list:[]}

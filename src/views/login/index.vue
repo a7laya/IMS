@@ -54,30 +54,38 @@
 		methods:{
 			submit(){
 				this.$refs.rulesForm.validate((e)=>{
-					console.log(e);
 					if(!e) return
 					// 提交表单
 					this.loading = true
-					this.axios.post('/admin/login',this.form).then(res=>{
+					this.axios.post('/api/admin/login',this.form).then(res=>{
 						console.log("res:",res)
 						let data = res.data.data
-						//  == 保存登录状态 == 存入vuex - 本地
+						//  == 保存登录状态 == 存入vuex user.js - 本地 window.sessionStorage
 						this.$store.commit('login',data)
 						//  == 保存权限规则 == 
 						if(data.role && data.role.rules){
 							window.sessionStorage.setItem('rules',JSON.stringify(data.role.rules))
 						}
 						//  == 生成后台菜单 == 
-						this.$store.commit('createNavBar',data.tree)
+						let arr = data.tree
+						arr.sort(this.sortByOrder)
+						this.$store.commit('createNavBar',arr)
+						console.log("this.adminIndex1:",this.adminIndex)
 						// 成功提示
-						this.$message('登录成功')
+						// this.$message('登录成功')
 						this.loading = false
 						// 跳转到后台首页
 						this.$router.push({name:this.adminIndex})
+						// console.log("data.tree:",data.tree)
 					}).catch(err => {
 					this.loading = false
 					})
 				})
+			},
+			
+			sortByOrder(a,b){
+				if(a.order !== undefined && b.order !== undefined) return a.order-b.order
+				return 0
 			}
 		}
 	}

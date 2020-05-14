@@ -59,7 +59,7 @@ export default {
 			});
 		}
 		// 获取原来的商品详情
-		let url = '/admin/goods/read/' + this.id;
+		let url = '/api/admin/goods/read/' + this.id;
 		this.layout.showLoading();
 		this.axios
 			.get(url, { token: true })
@@ -107,7 +107,7 @@ export default {
 			});
 		},
 		submit() {
-			let url = '/admin/goods/banners/' + this.id;
+			let url = '/api/admin/goods/banners/' + this.id;
 			let obj = {
 				banners: this.banners.map(v=>v.url)
 			};

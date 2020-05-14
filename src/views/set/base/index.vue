@@ -106,7 +106,7 @@ export default {
 	methods: {
 		getData(){
 			this.layout.showLoading()
-			this.axios.get('/admin/sysconfig',{token:true}).then(res=>{
+			this.axios.get('/api/admin/sysconfig',{token:true}).then(res=>{
 				this.form = res.data.data
 				this.form.password_encrypt = this.form.password_encrypt.split(',').map(v=>parseInt(v))
 				this.layout.hideLoading()
@@ -116,7 +116,7 @@ export default {
 		},
 		onSubmit(){
 			this.layout.showLoading()
-			let url = '/admin/sysconfig'
+			let url = '/api/admin/sysconfig'
 			let obj = {...this.form}
 			obj.password_encrypt = obj.password_encrypt.join(',')
 			this.axios.post(url,obj,{token:true}).then(res=>{

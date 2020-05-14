@@ -35,7 +35,7 @@ export default {
 			})
 		}
 		// 获取原来的商品详情
-		let url = "/admin/goods/read/" + this.id
+		let url = "/api/admin/goods/read/" + this.id
 		this.layout.showLoading()
 		this.axios.get(url,{token: true}).then(res=>{
 			this.content = res.data.data.content
@@ -52,7 +52,7 @@ export default {
 			// console.log("editor:",editor)
 		},
 		submit(){
-			let url = "/admin/goods/" + this.id
+			let url = "/api/admin/goods/" + this.id
 			let obj = {
 				content: this.content
 			}

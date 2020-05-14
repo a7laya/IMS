@@ -100,6 +100,10 @@ let routes = [
 					component: "set/payment/index"
 				},
 				{	
+					meta: { title:"仓库管理" },
+					component: "storehouse/index"
+				},
+				{	
 					meta: { title:"404错误" },
 					component: "error/404"
 				}

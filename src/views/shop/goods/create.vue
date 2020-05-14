@@ -163,7 +163,7 @@ export default {
 		this.id = this.$route.params.id
 		if(this.id) {
 			// 获取原来的商品详情
-			let url = "/admin/goods/read/" + this.id
+			let url = "/api/admin/goods/read/" + this.id
 			this.layout.showLoading()
 			this.axios.get(url,{token: true}).then(res=>{
 				let data = res.data.data
@@ -176,7 +176,7 @@ export default {
 		
 		
 		// 获取商品分类和运费模板，用于下拉选择
-		let url = "/admin/goods/create"
+		let url = "/api/admin/goods/create"
 		this.layout.showLoading()
 		this.axios.get(url,{token: true}).then(res=>{
 			let data = res.data.data
@@ -199,7 +199,7 @@ export default {
 			this.$refs.form.validate(res=>{
 				console.log("res:",res)
 				if(!res) return
-				let url = id ? `/admin/goods/${id}` : "/admin/goods"
+				let url = id ? `/api/admin/goods/${id}` : "/api/admin/goods"
 				let obj = {...this.form}
 				this.layout.showLoading()
 				this.axios.post(url,obj,{token: true}).then(res=>{

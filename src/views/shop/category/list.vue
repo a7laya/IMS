@@ -65,7 +65,7 @@
 			// 初始化
 			__init(){
 				this.layout.showLoading()
-				this.axios.get('/admin/category',{token: true}).then(res=>{
+				this.axios.get('/api/admin/category',{token: true}).then(res=>{
 					let data = res.data.data
 					let addEditStatus = function(arr) {
 						arr.forEach(item=>{
@@ -90,7 +90,7 @@
 			showOrHide(item) {
 				let status = item.status ? 0 : 1
 				this.layout.showLoading()
-				this.axios.post("/admin/category/"+item.id+"/update_status",{status},{token: true}).then(res=>{
+				this.axios.post("/api/admin/category/"+item.id+"/update_status",{status},{token: true}).then(res=>{
 					if(!res.data.data) return
 					this.$message({
 						type: 'success',
@@ -112,7 +112,7 @@
 					})
 				}
 				this.layout.showLoading()
-				this.axios.post("/admin/category/"+item.id,item,{token: true}).then(res=>{
+				this.axios.post("/api/admin/category/"+item.id,item,{token: true}).then(res=>{
 					if(!res.data.data) return
 					this.$message({
 						type: 'success',
@@ -135,7 +135,7 @@
 				// // 删除本节点
 				// children.splice(index, 1)
 				this.layout.showLoading()
-				this.axios.delete('/admin/category/' + data.id,{token: true}).then(res=>{
+				this.axios.delete('/api/admin/category/' + data.id,{token: true}).then(res=>{
 					console.log('res:',res)
 					this.__init()
 				}).catch(err => {
@@ -156,7 +156,7 @@
 			// 增加子节点
 			append(data) {
 				this.layout.showLoading()
-				this.axios.post("/admin/category",{
+				this.axios.post("/api/admin/category",{
 					status: 0,
 					name: '新分类',
 					category_id: data.id
@@ -190,7 +190,7 @@
 			// 节点拖拽成功完成时触发的事件
 			nodeDrop() {
 				this.layout.showLoading()
-				this.axios.post("/admin/category/sort",{
+				this.axios.post("/api/admin/category/sort",{
 					sortdata: JSON.stringify(this.sortData)
 				},{token: true}).then(res=>{
 					this.__init()
@@ -220,7 +220,7 @@
 						child: []
 					}
 					this.layout.showLoading()
-					this.axios.post("/admin/category",obj,{token: true}).then(res=>{
+					this.axios.post("/api/admin/category",obj,{token: true}).then(res=>{
 						console.log('res:',res)
 						this.__init()
 						this.$message({

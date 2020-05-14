@@ -181,7 +181,7 @@
 			},
 			// mixins-common获取请求列表分页的url
 			getListUrl(){
-				return `/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&keyword=${this.search.keyword}&user_level_id=${this.search.user_level_id}`
+				return `/api/admin/${this.preUrl}/${this.page.current}?limit=${this.page.size}&keyword=${this.search.keyword}&user_level_id=${this.search.user_level_id}`
 			},
 			// 打开模态框
 			openModel(e = false){
